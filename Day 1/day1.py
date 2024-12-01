@@ -4,7 +4,8 @@
 def read_file(pathname: str) -> tuple[list]:
     '''Read a file and return a tuple of two lists.
 
-    The file should contain pairs of integers separated by spaces, one pair per line.
+    The file should contain pairs of integers separated by spaces,
+    one pair per line.
     Each integer pair is split into two lists: left and right.
 
     Args:
@@ -21,9 +22,10 @@ def read_file(pathname: str) -> tuple[list]:
 def find_diff_id(left: list, right: list) -> int:
     '''Find the total difference between elements of two lists.
 
-    The function pairs up the smallest number in the left list with the smallest number
-    in the right list, the second-smallest with the second-smallest, and so on. It then
-    calculates the absolute difference for each pair and returns the sum of these differences.
+    The function pairs up the smallest number in the left list with
+    the smallest number in the right list, the second-smallest with
+    the second-smallest, and so on. It then calculates the absolute
+    difference for each pair and returns the sum of these differences.
 
     Args:
         left (list): The first list of integers.
@@ -38,8 +40,9 @@ def find_diff_id(left: list, right: list) -> int:
 def find_similarity(left: list, right: list) -> int:
     '''Find the similarity score between two lists.
 
-    The function calculates the similarity score by multiplying each number in the left list
-    by the number of times it appears in the right list, and then summing these products.
+    The function calculates the similarity score by multiplying each number
+    in the left list by the number of times it appears in the right list,
+    and then summing these products.
 
     Args:
         left (list): The first list of integers.
@@ -48,7 +51,7 @@ def find_similarity(left: list, right: list) -> int:
     Returns:
         int: The similarity score between the two lists.
     '''
-    return sum(numb*right.count(numb) for numb in left) # sum(x for x in right if x in set(left))
+    return sum(numb*right.count(numb) for numb in left)  # sum(x for x in right if x in set(left))
 
 
 if __name__ == '__main__':
