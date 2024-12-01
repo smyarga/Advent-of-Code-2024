@@ -9,10 +9,12 @@ def read_file(pathname: str) -> list:
 
 
 def find_diff_id(left: list, right: list) -> int:
+    '''find difference between elements of two lists'''
     return sum(abs(right[i]-val) for i, val in enumerate(left))
 
 
 def find_similarity(left: list, right: list) -> int:
+    '''find similarity score'''
     return sum(numb*right.count(numb) for numb in left)
 
 
