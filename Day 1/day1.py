@@ -48,7 +48,7 @@ def find_similarity(left: list, right: list) -> int:
     Returns:
         int: The similarity score between the two lists.
     '''
-    return sum(numb*right.count(numb) for numb in left)
+    return sum(numb*right.count(numb) for numb in left) # sum(x for x in right if x in set(left))
 
 
 if __name__ == '__main__':
@@ -65,3 +65,4 @@ if __name__ == '__main__':
     #     left, right = zip(*(map(int, line.strip().split()) for line in file))
     #     print('Part 1:', sum(abs(r_val - l_val) for l_val, r_val in zip(sorted(left), sorted(right))))
     #     print('Part 2:', sum(numb*right.count(numb) for numb in left))
+    #     print('Part 2:', sum(x for x in right if x in set(left)))
