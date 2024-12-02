@@ -39,15 +39,17 @@ def read_file(pathname: str) -> list:
 
     Examples:
     >>> read_file('test.txt')
-    [[7, 6, 4, 2, 1], [1, 2, 7, 8, 9], [9, 7, 6, 2, 1], [1, 3, 2, 4, 5], [8, 6, 4, 4, 1], [1, 3, 6, 7, 9]]
+    [[7, 6, 4, 2, 1], [1, 2, 7, 8, 9], [9, 7, 6, 2, 1], [1, 3, 2, 4, 5], \
+[8, 6, 4, 4, 1], [1, 3, 6, 7, 9]]
     '''
     with open(pathname, 'r', encoding='utf-8') as file:
         return [list(map(int, line.split())) for line in file]
 
+
 def number_safe(rows: list[list[int]]) -> int:
     '''
-    Count the number of safe lines and the number of lines that can be made safe
-    by removing one element.
+    Count the number of safe lines and the number of lines that
+    can be made safe by removing one element.
 
     Parameters:
     rows (list of list of int): A list where each element is a list of integers
