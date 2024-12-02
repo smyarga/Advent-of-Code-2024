@@ -7,11 +7,8 @@ def is_safe(line):
     >>> is_safe([1, 2, 7, 8, 9])
     False
     '''
-    differences = []
-    n = len(line) - 1
-    for i, el in enumerate(line[1:]):
-        differences.append(line[i] - el)
-    return sum(-3 <= i <= -1 for i in differences) == n or sum(1 <= i <= 3 for i in differences) == n
+    differences = {line[i] - el for i, el in enumerate(line[1:])}
+    return differences <= {-3, -2, -1} or differences <= {1, 2, 3} 
 
 
 def read_file(pathname: str) -> list:
@@ -21,12 +18,12 @@ def read_file(pathname: str) -> list:
         n_safe1, n_safe2 = 0, 0
         for line in file:
             line = list(map(int, line.split()))
-            if is_safe(line):
-                n_safe1 += 1
-                n_safe2 += 1
-            else:
+            safe1 = is_safe(line)
+            n_safe1 += safe1
+            if not safe1:
                 n_safe2 += any(is_safe(line[:j] + line[j+1:]) for j in range(len(line)))
-    return n_safe1, n_safe2
+    return n_safe1, n_safe1 + n_safe2
+
 
 if __name__ == '__main__':
     import doctest
