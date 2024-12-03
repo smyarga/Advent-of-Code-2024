@@ -16,10 +16,10 @@ def read_file(pathname: str) -> list[list[str]]:
 
     Example:
     >>> read_file('test.txt')
-    [['mul(2,4)', 'mul(5,5)', 'mul(11,8)', 'mul(8,5)']]
+    [[('2', '4'), ('5', '5'), ('11', '8'), ('8', '5')]]
     """
     with open(pathname, 'r', encoding='utf-8') as file:
-        return [re.findall(r"mul\(\d*?,\d*?\)", line) for line in file]
+        return [re.findall(r"mul\((\d{1,3}),(\d{1,3})\)", line) for line in file]
 
 
 def read_file2(pathname: str) -> list[list[str]]:
@@ -36,10 +36,10 @@ def read_file2(pathname: str) -> list[list[str]]:
 
     Example:
     >>> read_file2('test1.txt')
-    [['mul(2,4)', "don't()", 'mul(5,5)', 'mul(11,8)', 'do()', 'mul(8,5)']]
+    [[('2', '4', '', ''), ('', '', "don't()", ''), ('5', '5', '', ''), ('11', '8', '', ''), ('', '', '', 'do()'), ('8', '5', '', '')]]
     """
     with open(pathname, 'r', encoding='utf-8') as file:
-        return [re.findall(r"mul\(\d+,\d+\)|don't\(\)|do\(\)", line) for line in file]
+        return [re.findall(r"mul\((\d{1,3}),(\d{1,3})\)|(don't\(\))|(do\(\))", line) for line in file]
 
 
 def main_function(rows: list[list[str]]) -> int:
@@ -55,10 +55,10 @@ def main_function(rows: list[list[str]]) -> int:
         int: The sum of all evaluated 'mul' function calls.
 
     Example:
-    >>> main_function([['mul(2,4)', 'mul(5,5)', 'mul(11,8)', 'mul(8,5)']])
+    >>> main_function([[('2', '4'), ('5', '5'), ('11', '8'), ('8', '5')]])
     161
     """
-    return sum(sum(map(lambda x: math.prod(map(int, x[4:-1].split(','))), row)) for row in rows)
+    return sum(sum(map(lambda x: int(x[0])*int(x[1]), row)) for row in rows)
 
 
 def main_function2(rows: list[list[str]]) -> int:
@@ -75,17 +75,19 @@ def main_function2(rows: list[list[str]]) -> int:
         by 'do' and "don't" commands.
 
     Example:
-    >>> main_function2([['mul(2,4)', "don't()", 'mul(5,5)', 'mul(11,8)', 'do()', 'mul(8,5)']])
+    >>> main_function2([[('2', '4', '', ''), ('', '', "don't()", ''), ('5', '5', '', ''), ('11', '8', '', ''), ('', '', '', 'do()'), ('8', '5', '', '')]])
     48
     """
     result = 0
     flag = True
     for row in rows:
-        for el in row:
-            if el in {"don't()", 'do()'}:
-                flag = (el == 'do()')
+        for a, b, dont, do in row:
+            if do:
+                flag = True
+            elif dont:
+                flag = False
             elif flag:
-                result += math.prod(map(int, el[4:-1].split(',')))
+                result += int(a)*int(b)
     return result
 
 
