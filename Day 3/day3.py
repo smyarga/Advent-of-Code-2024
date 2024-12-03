@@ -1,48 +1,104 @@
 import re
 
-def mul(a, b):
-    '''
-    >>> mul(2,4)
-    8
-    '''
-    return a*b
+def mul(a: int, b: int) -> int:
+    """
+    Multiplies two integers.
+
+    Args:
+        a (int): The first integer.
+        b (int): The second integer.
+
+    Returns:
+        int: The product of a and b.
+
+    Example:
+        >>> mul(2, 4)
+        8
+    """
+    return a * b
 
 
-def read_file(pathname: str) -> list:
-    '''
+def read_file(pathname: str) -> list[list[str]]:
+    """
+    Reads a file and extracts all occurrences of 'mul' function calls.
+
+    Args:
+        pathname (str): The path to the file to be read.
+
+    Returns:
+        list[list[str]]: A list of lists containing strings that
+                            match the pattern 'mul(a,b)'.
+
+    Example:
     >>> read_file('test.txt')
     [['mul(2,4)', 'mul(5,5)', 'mul(11,8)', 'mul(8,5)']]
-    '''
+    """
     with open(pathname, 'r', encoding='utf-8') as file:
         return [re.findall(r"mul\(\d*?,\d*?\)", line) for line in file]
 
 
-def read_file2(pathname: str) -> list:
-    '''
+def read_file2(pathname: str) -> list[list[str]]:
+    """
+    Reads a file and extracts all occurrences of
+    'mul', 'don't', and 'do' function calls.
+
+    Args:
+        pathname (str): The path to the file to be read.
+
+    Returns:
+        list[list[str]]: A list of lists containing strings that
+                match the patterns 'mul(a,b)', "don't()", or 'do()'.
+
+    Example:
     >>> read_file2('test1.txt')
     [['mul(2,4)', "don't()", 'mul(5,5)', 'mul(11,8)', 'do()', 'mul(8,5)']]
-    '''
+    """
     with open(pathname, 'r', encoding='utf-8') as file:
         return [re.findall(r"mul\(\d+,\d+\)|don't\(\)|do\(\)", line) for line in file]
 
 
-def main_function(rows: list) -> int:
+def main_function(rows: list[list[str]]) -> int:
+    """
+    Evaluates and sums up all 'mul' function calls in
+    the provided list of lists.
+
+    Args:
+        rows (list[list[str]]): A list of lists containing
+        strings of 'mul' function calls.
+
+    Returns:
+        int: The sum of all evaluated 'mul' function calls.
+
+    Example:
+        >>> main_function([['mul(2,4)', 'mul(5,5)', 'mul(11,8)', 'mul(8,5)']])
+        161
+    """
     return sum(sum(map(eval, row)) for row in rows)
 
 
-def main_function2(rows: list) -> int:
-    '''
+def main_function2(rows: list[list[str]]) -> int:
+    """
+    Evaluates and sums up 'mul' function calls in the provided list of lists, 
+    respecting 'do' and "don't" commands to control evaluation.
+
+    Args:
+        rows (list[list[str]]): A list of lists containing strings
+        of 'mul', 'do', and "don't" function calls.
+
+    Returns:
+        int: The sum of all evaluated 'mul' function calls, controlled
+        by 'do' and "don't" commands.
+
+    Example:
     >>> main_function2([['mul(2,4)', "don't()", 'mul(5,5)', 'mul(11,8)', 'do()', 'mul(8,5)']])
     48
-    '''
+    """
     result = 0
     flag = True
     for row in rows:
         for el in row:
-            if el == "don't()":
-                flag = False
-            elif el == 'do()':
-                flag = True
+            if el in {"don't()", 'do()'}:
+                flag = (el == 'do()')
             elif flag:
                 result += eval(el)
     return result
@@ -56,4 +112,4 @@ if __name__ == '__main__':
     print('Task on test:', main_function(input_test))
     print('Task on input:', main_function(input_real))
     print('Task2 on test:', main_function2(read_file2('test1.txt')))
-    print('Task2 on input:',main_function2(read_file2('input.txt')))
+    print('Task2 on input:', main_function2(read_file2('input.txt')))
