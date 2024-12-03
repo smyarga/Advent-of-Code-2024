@@ -1,21 +1,6 @@
 import re
-
-def mul(a: int, b: int) -> int:
-    """
-    Multiplies two integers.
-
-    Args:
-        a (int): The first integer.
-        b (int): The second integer.
-
-    Returns:
-        int: The product of a and b.
-
-    Example:
-        >>> mul(2, 4)
-        8
-    """
-    return a * b
+# from operator import mul
+import math
 
 
 def read_file(pathname: str) -> list[list[str]]:
@@ -70,10 +55,10 @@ def main_function(rows: list[list[str]]) -> int:
         int: The sum of all evaluated 'mul' function calls.
 
     Example:
-        >>> main_function([['mul(2,4)', 'mul(5,5)', 'mul(11,8)', 'mul(8,5)']])
-        161
+    >>> main_function([['mul(2,4)', 'mul(5,5)', 'mul(11,8)', 'mul(8,5)']])
+    161
     """
-    return sum(sum(map(eval, row)) for row in rows)
+    return sum(sum(map(lambda x: math.prod(map(int, x[4:-1].split(','))), row)) for row in rows)
 
 
 def main_function2(rows: list[list[str]]) -> int:
@@ -100,7 +85,7 @@ def main_function2(rows: list[list[str]]) -> int:
             if el in {"don't()", 'do()'}:
                 flag = (el == 'do()')
             elif flag:
-                result += eval(el)
+                result += math.prod(map(int, el[4:-1].split(',')))
     return result
 
 
