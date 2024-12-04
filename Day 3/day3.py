@@ -1,6 +1,6 @@
 import re
 # from operator import mul
-import math
+# import math
 
 
 def read_file(pathname: str) -> list[list[str]]:
