@@ -1,4 +1,8 @@
+'''Day 4'''
+
+
 import itertools
+
 
 def read_file(pathname: str) -> list[str]:
     """
@@ -24,7 +28,8 @@ def main_function(rows: list[str]) -> int:
     (horizontal, vertical, and diagonal) within the given list of strings.
 
     Args:
-        rows (list[str]): A list of strings, each representing a row of characters.
+        rows (list[str]): A list of strings, each representing
+        a row of characters.
 
     Returns:
         int: The total number of times the sequence 'MAS' appears.
@@ -34,8 +39,10 @@ def main_function(rows: list[str]) -> int:
     for y, row in enumerate(rows):
         for x, el in enumerate(row):
             for dy, dx in dirs:
-                if el == 'X' and 0 <= y + 3*dy < len(rows) and 0 <= x + 3*dx < len(row):
-                    n += (rows[y + dy][x + dx] + rows[y + 2*dy][x + 2*dx] + rows[y + 3*dy][x + 3*dx] == 'MAS')
+                if (el == 'X' and 0 <= y + 3*dy < len(rows)
+                        and 0 <= x + 3*dx < len(row)):
+                    n += (rows[y + dy][x + dx] + rows[y + 2*dy][x + 2*dx]
+                          + rows[y + 3*dy][x + 3*dx] == 'MAS')
     return n
 
 
@@ -47,7 +54,8 @@ def main_function2(rows: list[str]) -> int:
     directions within the given list of strings.
 
     Args:
-        rows (list[str]): A list of strings, each representing a row of characters.
+        rows (list[str]): A list of strings, each representing a row
+        of characters.
 
     Returns:
         int: The total number of times the sequences 'SAM' and 'MAS' appear
@@ -57,7 +65,8 @@ def main_function2(rows: list[str]) -> int:
     for y, row in enumerate(rows):
         for x, el in enumerate(row):
             if 0 <= y + 2 < len(rows) and 0 <= x + 2 < len(row):
-                if (el + rows[y + 1][x + 1] + rows[y + 2][x + 2]) in ['MAS', 'SAM']:
+                if (el + rows[y + 1][x + 1] + rows[y + 2][x + 2]
+                        in ['MAS', 'SAM']):
                     n += (rows[y + 2][x] + 'A' + row[x + 2]) in ['MAS', 'SAM']
     return n
 

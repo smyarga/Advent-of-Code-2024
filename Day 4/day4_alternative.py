@@ -1,3 +1,6 @@
+'''Day 4'''
+
+
 def read_file(pathname: str) -> dict[tuple[int, int], str]:
     """
     Reads a file and converts its content into a dictionary.
@@ -15,7 +18,8 @@ def read_file(pathname: str) -> dict[tuple[int, int], str]:
         characters themselves.
     """
     with open(pathname, 'r', encoding='utf-8') as file:
-        return {(i, j): el for i, line in enumerate(file) for j, el in enumerate(line)}
+        return {(i, j): el for i, line in enumerate(file)
+                for j, el in enumerate(line)}
 
 
 def main_function(dct: dict[tuple[int, int], str]) -> int:
@@ -33,7 +37,8 @@ def main_function(dct: dict[tuple[int, int], str]) -> int:
         int: The total number of times the sequence 'XMAS' appears.
     """
     dirs = {0, -1, 1}
-    return sum(''.join(dct.get((i + di * n, j + dj * n), '') for n in range(4)) == 'XMAS'
+    return sum(''.join(dct.get((i + di * n, j + dj * n), '')
+                       for n in range(4)) == 'XMAS'
                for i, j in dct for di in dirs for dj in dirs)
 
 
@@ -53,10 +58,11 @@ def main_function2(dct: dict[tuple[int, int], str]) -> int:
         in the specified diagonal directions.
     """
     xmas = {'SAM', 'MAS'}
-    return sum(''.join(dct.get((i + d, j + d), '') for d in (-1, 0, 1)) in xmas
-               and ''.join(dct.get((i + d, j - d), '') for d in (-1, 0, 1)) in xmas
+    return sum(''.join(dct.get((i + d, j + d), '')
+                       for d in (-1, 0, 1)) in xmas
+               and ''.join(dct.get((i + d, j - d), '')
+                           for d in (-1, 0, 1)) in xmas
                for i, j in dct)
-
 
 
 if __name__ == '__main__':
