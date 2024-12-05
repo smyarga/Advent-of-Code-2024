@@ -1,3 +1,5 @@
+"""Day 5"""
+
 from functools import cmp_to_key
 
 
@@ -22,24 +24,23 @@ def read_file(pathname: str) -> tuple:
     return cmp, lines
 
 
-
 def main_function(cmp, lines) -> tuple[int, int]:
     """
     Evaluates and categorizes lines of data into correct and incorrect sums.
 
-    Each line is split into elements and sorted using a provided comparison function.
-    If the original line matches the sorted line, the middle element is added to the
-    correct sum. Otherwise, the middle element of the sorted line is added to the
-    incorrect sum.
+    Each line is split into elements and sorted using a provided comparison
+    function. If the original line matches the sorted line, the middle element
+    is added to the correct sum. Otherwise, the middle element of the sorted
+    line is added to the incorrect sum.
 
     Args:
         cmp: A comparison function used to sort elements within each line.
         lines: A string containing multiple lines of comma-separated values.
 
     Returns:
-        tuple[int, int]: A tuple containing two integers: the sum of middle elements
-        from correctly sorted lines and the sum of middle elements from incorrectly
-        sorted lines.
+        tuple[int, int]: A tuple containing two integers: the sum of middle
+        elements from correctly sorted lines and the sum of middle elements
+        from incorrectly sorted lines.
     """
     result_correct, result_incorrect = 0, 0
     for line in lines.split():
@@ -50,7 +51,6 @@ def main_function(cmp, lines) -> tuple[int, int]:
         else:
             result_incorrect += int(sorted_line[len(line)//2])
     return result_correct, result_incorrect
-
 
 
 if __name__ == '__main__':

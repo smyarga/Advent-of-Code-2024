@@ -1,3 +1,4 @@
+'''Day 5'''
 
 
 def read_file(pathname: str) -> tuple[dict[str, set[str]], list[list[str]]]:
@@ -6,7 +7,7 @@ def read_file(pathname: str) -> tuple[dict[str, set[str]], list[list[str]]]:
 
     The file is expected to contain lines with either '|' separated key-value
     pairs or comma-separated values.
-    
+
     Lines with '|' are added to a dictionary where the key is mapped to
     a set of values.
     Lines with commas are split into lists and added to a list of lists.
@@ -31,7 +32,7 @@ def read_file(pathname: str) -> tuple[dict[str, set[str]], list[list[str]]]:
     return dct, data
 
 
-def main_function(dct: dict[str, set[str]], data: list[list[str]]) -> tuple[list[list[str]], list[list[str]]]:
+def main_function(dct: dict[str, set[str]], data: list[list[str]]) -> tuple:
     """
     Processes the data to separate it into correct and incorrect lists
     based on the dictionary.
@@ -54,7 +55,8 @@ def main_function(dct: dict[str, set[str]], data: list[list[str]]) -> tuple[list
     result_correct, result_incorrect = [], []
     for line in data:
         for i, el in enumerate(line):
-            if (el in dct) and (not (set(line[i+1:]) <= dct[el]) or dct[el] & set(line[:i])):
+            if (el in dct) and (not (set(line[i+1:]) <= dct[el])
+                                or dct[el] & set(line[:i])):
                 result_incorrect.append(line)
                 break
         else:
@@ -76,7 +78,7 @@ def find_middle(lines: list[list[str]]) -> int:
     return sum(int(line[len(line)//2]) for line in lines)
 
 
-def fix_incorrect(lines: list[list[str]], dct: dict[str, set[str]]) -> list[list[str]]:
+def fix_incorrect(lines: list[list[str]], dct: dict[str, set[str]]) -> list:
     """
     Attempts to fix incorrect lines by sorting elements
     based on the dictionary.
@@ -89,7 +91,8 @@ def fix_incorrect(lines: list[list[str]], dct: dict[str, set[str]]) -> list[list
         dct (dict[str, set[str]]): A dictionary mapping keys to sets of values.
 
     Returns:
-        list[list[str]]: A list of lists with the lines sorted according to the dictionary.
+        list[list[str]]: A list of lists with the lines sorted according to
+        the dictionary.
     """
     result = []
     for line in lines:
