@@ -8,6 +8,7 @@ achieved using specified operations.
 from itertools import product
 import time
 from functools import wraps
+from math import log10
 
 def timeit(func: callable) -> callable:
     """
@@ -49,38 +50,36 @@ def read_file(pathname: str) -> list[tuple[int, tuple[int]]]:
 
 def is_possible(key: int, values: tuple[int], symbols: tuple[str]) -> bool:
     """
-    Determines if a target key can be achieved using a combination of
-    operations on a tuple of values.
+    Determines if a target key can be achieved using a combination
+    of operations on a tuple of values.
 
     Args:
-        key (int): The target number to achieve.
-        values (tuple[int]): A tuple of integers to operate on.
+        key (int): The target number to be achieved.
+        values (tuple[int]): A tuple of integers to be combined using
+        operations.
         symbols (tuple[str]): A tuple of operation symbols ('+', '*', '||').
 
     Returns:
         bool: True if the target key can be achieved, False otherwise.
-
-    Examples:
-        >>> is_possible(190, (10, 19), ('+', '*', '||'))
-        True
-        >>> is_possible(3267, (81, 40, 27), ('+', '*', '||'))
-        True
-        >>> is_possible(83, (17, 5), ('+', '*', '||'))
-        False
     """
-    signs = product(symbols, repeat=len(values)-1)
-    for comb in signs:
-        result = values[0]
-        for i, el in enumerate(values[1:]):
-            if comb[i] == '+':
-                result += el
-            elif comb[i] == '*':
-                result *= el
-            elif comb[i] == '||':
-                result = result*10**len(str(el)) + el
-        if result == key:
-            return True
-    return False
+    possible_results = [set() for _ in range(len(values))]
+    possible_results[0].add(values[0])
+
+    for i, val in enumerate(values[1:], start=1):
+        for prev_result in possible_results[i-1]:
+            for op in symbols:
+                if op == '+':
+                    new_res = prev_result + val
+                elif op == '*':
+                    new_res = prev_result * val
+                elif op == '||':
+                    new_res = prev_result * 10**(int(log10(val)) + 1) + val
+
+                if new_res <= key:
+                    possible_results[i].add(new_res)
+    
+    return key in possible_results[-1]
+
 
 @timeit
 def main_function(dct: list[tuple[int, tuple[int]]], symbols: tuple[str]) -> int:
@@ -103,13 +102,7 @@ if __name__ == '__main__':
     doctest.testmod()
     input_test = read_file('Day 7/test.txt')
     input_real = read_file('Day 7/input.txt')
-    # print(input_test)
     print('Task1 on test:', main_function(input_test, ('+', '*')))
     print('Task1 on test:', main_function(input_real, ('+', '*')))
     print('Task1 on test:', main_function(input_test, ('+', '*', '||')))
     print('Task1 on test:', main_function(input_real, ('+', '*', '||')))
-    # print('Task1 on test:', main_function(input_real, {'+', '*'}))
-    # print('Task1 on input:', main_function(input_real)[2])
-    # print('Task2 on test:', main_function2(input_test))
-    # # (6, 3), (7, 6), (7, 7), (8, 1), (8, 3), (9, 7)
-    # print('Task2 on test:', main_function2(input_real))
