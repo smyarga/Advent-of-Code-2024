@@ -60,3 +60,5 @@ if __name__ == '__main__':
     input_real = read_file('Day 5/input.txt')
     print('Task1 on test:', main_function(*input_test))
     print('Task1 on input:', main_function(*input_real))
+    input_test1 = read_file('Day 5/test1.txt')
+    print('Task1 on input:', main_function(*input_test1))
