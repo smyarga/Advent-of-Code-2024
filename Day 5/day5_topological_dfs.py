@@ -78,35 +78,45 @@ def find_middle(lines: list[list[str]]) -> int:
     return sum(int(line[len(line)//2]) for line in lines)
 
 
-def fix_incorrect(lines: list[list[str]], dct: dict[str, set[str]]) -> list:
+def fix_incorrect(lines: list[list[str]], dct: dict[str, set[str]]) -> list[list[str]]:
     """
     Attempts to fix incorrect lines by sorting elements
     based on the dictionary.
-
-    For each line, elements are sorted such that each element is placed
-    before any elements that it maps to in the dictionary.
 
     Args:
         lines (list[list[str]]): A list of lists of strings to be fixed.
         dct (dict[str, set[str]]): A dictionary mapping keys to sets of values.
 
     Returns:
-        list[list[str]]: A list of lists with the lines sorted according to
-        the dictionary.
+        list[list[str]]: A list of lists with the lines sorted according to the dictionary.
     """
     result = []
     for line in lines:
-        n = len(line)
-        if n <= 1:
-            return []
-        for i in range(1, n):
-            key = line[i]
-            j = i - 1
-            while j >= 0 and key in dct and line[j] in dct[key]:
-                line[j+1] = line[j]
-                j -= 1
-            line[j+1] = key
-        result.append(line)
+        visited = {}
+        ordered_line = []
+        line_set = set(line)
+
+        def dfs(node):
+            visited[node] = 1
+
+            for neigh in dct.get(node, set()):
+                if neigh in line_set:
+                    if neigh not in visited:
+                        dfs(neigh)
+                    elif visited[neigh] == 1:
+                        raise ValueError("Graph is not a DAG - cycle detected.")
+            visited[node] = 2
+            ordered_line.append(node)
+
+        for start in line:
+            if start not in visited and start in dct:
+                dfs(start)
+            elif start not in visited:
+                visited[start] = 2
+                ordered_line.append(start)
+
+        ordered_line.reverse()
+        result.append(ordered_line)
     return result
 
 
@@ -118,11 +128,11 @@ if __name__ == '__main__':
     correct_test, incorrect_test = main_function(*input_test)
     correct_real, incorrect_real = main_function(*input_real)
     print('Task1 on test:', find_middle(correct_test))
-    print('Task1 on input:', find_middle(correct_real))
+    # print('Task1 on input:', find_middle(correct_real))
     fixed_test = fix_incorrect(incorrect_test, input_test[0])
-    fixed_real = fix_incorrect(incorrect_real, input_real[0])
     print(fixed_test)
     print('Task2 on test:', find_middle(fixed_test))
+    fixed_real = fix_incorrect(incorrect_real, input_real[0])
     print('Task2 on input:', find_middle(fixed_real))
     input_test1 = read_file('Day 5/test1.txt')
     print('Task1 on input:',  fix_incorrect(main_function(*input_test1)[1], input_test1[0]))

@@ -1,5 +1,5 @@
 '''Day 5'''
-
+from copy import deepcopy
 
 def read_file(pathname: str) -> tuple[dict[str, set[str]], list[list[str]]]:
     """
@@ -77,6 +77,40 @@ def find_middle(lines: list[list[str]]) -> int:
     """
     return sum(int(line[len(line)//2]) for line in lines)
 
+def topological_sort(line, dct, no_incoming):
+    dct_new = deepcopy(dct)
+    new_line = []
+    while no_incoming:
+        n = no_incoming.pop()
+        if n in line:
+            new_line.append(n)
+        for el in dct_new[n].copy():
+            dct_new[n].remove(el)
+            if not dct_new[n]:
+                del dct_new[n]
+            if dct_new == {}:
+                if el in line:
+                    new_line.append(el)
+                break
+            if el not in set.union(*dct_new.values()):
+                no_incoming.add(el)
+    return new_line
+
+
+def insertion_sort(line, dct):
+    line = line.copy()
+    n = len(line)
+    if n <= 1:
+        return []
+    for i in range(1, n):
+        key = line[i]
+        j = i - 1
+        while j >= 0 and key in dct and line[j] in dct[key]:
+            line[j+1] = line[j]
+            j -= 1
+        line[j+1] = key
+    return line
+
 
 def fix_incorrect(lines: list[list[str]], dct: dict[str, set[str]]) -> list:
     """
@@ -95,18 +129,12 @@ def fix_incorrect(lines: list[list[str]], dct: dict[str, set[str]]) -> list:
         the dictionary.
     """
     result = []
+    no_incoming = {value for value in dct if value not in set.union(*dct.values())}
     for line in lines:
-        n = len(line)
-        if n <= 1:
-            return []
-        for i in range(1, n):
-            key = line[i]
-            j = i - 1
-            while j >= 0 and key in dct and line[j] in dct[key]:
-                line[j+1] = line[j]
-                j -= 1
-            line[j+1] = key
-        result.append(line)
+        if no_incoming:
+            result.append(topological_sort(line, dct, no_incoming))
+        else:
+            result.append(insertion_sort(line, dct))
     return result
 
 
@@ -121,7 +149,6 @@ if __name__ == '__main__':
     print('Task1 on input:', find_middle(correct_real))
     fixed_test = fix_incorrect(incorrect_test, input_test[0])
     fixed_real = fix_incorrect(incorrect_real, input_real[0])
-    print(fixed_test)
     print('Task2 on test:', find_middle(fixed_test))
     print('Task2 on input:', find_middle(fixed_real))
     input_test1 = read_file('Day 5/test1.txt')
