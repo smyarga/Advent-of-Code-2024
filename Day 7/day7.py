@@ -1,14 +1,13 @@
 """
-This module provides functions to read a file, check if a target number can be 
-achieved using a combination of operations, and measure the execution time of 
-functions. It includes a main function to sum keys for which a target can be 
+This module provides functions to read a file, check if a target number can be
+achieved using a combination of operations, and measure the execution time of
+functions. It includes a main function to sum keys for which a target can be
 achieved using specified operations.
 """
-
-from itertools import product
 import time
 from functools import wraps
 from math import log10
+
 
 def timeit(func: callable) -> callable:
     """
@@ -25,7 +24,7 @@ def timeit(func: callable) -> callable:
         start = time.perf_counter()
         result = func(*args, **kwargs)
         end = time.perf_counter()
-        print(f"Function '{func.__name__}' executed in {(end - start):.6f} seconds")
+        print(f"Function '{func.__name__}': {(end - start):.6f} seconds")
         return result
     return wrapper
 
@@ -40,7 +39,7 @@ def read_file(pathname: str) -> list[tuple[int, tuple[int]]]:
         pathname (str): The path to the file to be read.
 
     Returns:
-        list[tuple[int, tuple[int]]]: A list of tuples, each containing an 
+        list[tuple[int, tuple[int]]]: A list of tuples, each containing an
         integer key and a tuple of integer values.
     """
     with open(pathname, 'r', encoding='utf-8') as file:
@@ -77,17 +76,18 @@ def is_possible(key: int, values: tuple[int], symbols: tuple[str]) -> bool:
 
                 if new_res <= key:
                     possible_results[i].add(new_res)
-    
+
     return key in possible_results[-1]
 
 
 @timeit
 def main_function(dct: list[tuple[int, tuple[int]]], symbols: tuple[str]) -> int:
     """
-    Sums the keys for which the target can be achieved using specified operations.
+    Sums the keys for which the target can be achieved using specified
+    operations.
 
     Args:
-        dct (list[tuple[int, tuple[int]]]): A list of tuples containing keys 
+        dct (list[tuple[int, tuple[int]]]): A list of tuples containing keys
         and values.
         symbols (tuple[str]): A tuple of operation symbols ('+', '*', '||').
 
