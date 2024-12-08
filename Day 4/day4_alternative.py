@@ -19,7 +19,7 @@ def read_file(pathname: str) -> dict[tuple[int, int], str]:
     """
     with open(pathname, 'r', encoding='utf-8') as file:
         return {(i, j): el for i, line in enumerate(file)
-                for j, el in enumerate(line)}
+                for j, el in enumerate(line.strip())}
 
 
 def main_function(dct: dict[tuple[int, int], str]) -> int:
