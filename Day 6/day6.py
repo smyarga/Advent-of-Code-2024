@@ -18,7 +18,8 @@ def read_file(pathname: str) -> list[str]:
         return file.read().splitlines()
 
 
-def main_function(rows: list[str]) -> tuple[tuple[int, int], set[tuple[int, int]], int]:
+def main_function(rows: list[str]) -> tuple[
+        tuple[int, int], set[tuple[int, int]], int]:
     """
     Simulates a path traversal based on given directions and returns
     the starting position, the set of visited positions, and the count
@@ -36,6 +37,7 @@ def main_function(rows: list[str]) -> tuple[tuple[int, int], set[tuple[int, int]
     directions = {'^': (-1, 0), '>': (0, 1), '<': (0, -1), 'v': (1, 0)}
     turn = cycle('>v<^')
     cur_dir = '^'
+    st_x, st_y = 0, 0
     for i, row in enumerate(rows):
         if cur_dir in row:
             st_x, st_y = i, row.index(cur_dir)
@@ -58,11 +60,12 @@ def main_function(rows: list[str]) -> tuple[tuple[int, int], set[tuple[int, int]
 
 def main_function2(rows: list[str]) -> int:
     """
-    Determines the number of obstacles encountered when simulating path traversal
-    with different starting conditions.
+    Determines the number of obstacles encountered when simulating path
+    traversal with different starting conditions.
 
     Args:
-        rows (List[str]): A list of strings representing the grid with directions.
+        rows (List[str]): A list of strings representing the grid with
+        directions.
 
     Returns:
         int: The number of unique obstacles encountered.
