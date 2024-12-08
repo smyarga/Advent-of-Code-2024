@@ -1,4 +1,6 @@
+'''Day 8'''
 from itertools import permutations, count
+
 
 def read_file(pathname: str) -> dict[tuple[int, int], str]:
     """
@@ -21,13 +23,34 @@ def read_file(pathname: str) -> dict[tuple[int, int], str]:
                 for j, el in enumerate(line.strip())}
 
 
+def trace_path(grid: dict[tuple[int, int], str],
+               start: tuple[int],
+               slope: tuple[int],
+               can_repeat: bool) -> set:
+    """Trace along a line defined by start + n*slope,
+    stopping if out of grid or if repeat=False."""
+    antinodes = set()
+    x, y = start
+    dx, dy = slope
+    for i in count(1):
+        coord = (x + dx*i, y + dy*i)
+        if coord in grid:
+            antinodes.add(coord)
+        else:
+            break
+        if not can_repeat:
+            break
+    return antinodes
+
+
 def main_function(grid: list[str], repeat=False) -> int:
     """
-    Determines the number of obstacles encountered when simulating path traversal
-    with different starting conditions.
+    Determines the number of obstacles encountered when simulating path
+    traversal with different starting conditions.
 
     Args:
-        rows (List[str]): A list of strings representing the grid with directions.
+        rows (List[str]): A list of strings representing the grid
+        with directions.
 
     Returns:
         int: The number of unique obstacles encountered.
@@ -36,33 +59,23 @@ def main_function(grid: list[str], repeat=False) -> int:
     antinodes = set()
     for symbol in antennas:
         coord_symb = {key for key, symb in grid.items() if symb == symbol}
-        for (coord1_x, coord1_y), (coord2_x, coord2_y) in permutations(coord_symb, 2):
-            slope_x, slope_y = (coord2_x-coord1_x, coord2_y-coord1_y)
-            for i in count(1):
-                if (coord2_x+slope_x*i, coord2_y + slope_y*i) in grid:
-                    antinodes.add((coord2_x+slope_x*i, coord2_y + slope_y*i))
-                else:
-                    break
-                if not repeat:
-                    break
-            for i in count(1):
-                if (coord1_x-slope_x*i, coord1_y - slope_y*i) in grid:
-                    antinodes.add((coord1_x-slope_x*i, coord1_y - slope_y*i))
-                else:
-                    break
-                if not repeat:
-                    break
-            for i in count(1):
-                if not repeat:
-                    break
-                if (coord2_x-slope_x*i, coord2_y - slope_y*i) in grid:
-                    antinodes.add((coord2_x-slope_x*i, coord2_y - slope_y*i))
-                else:
-                    break
+        for (x1, y1), (x2, y2) in permutations(coord_symb, 2):
+            slope_x, slope_y = (x2-x1, y2-y1)
+            antinodes |= trace_path(grid,
+                                    (x2, y2),
+                                    (slope_x, slope_y),
+                                    repeat)
+            antinodes |= trace_path(grid,
+                                    (x1, y1),
+                                    (-slope_x, -slope_y),
+                                    repeat)
+            if repeat:
+                antinodes |= trace_path(grid,
+                                        (x2, y2),
+                                        (-slope_x, -slope_y),
+                                        repeat)
 
     return len(antinodes)
-
-
 
 
 if __name__ == '__main__':
@@ -73,6 +86,6 @@ if __name__ == '__main__':
     print('Task1 on test:', main_function(input_test))
     print('Task1 on input:', main_function(input_real))
     input_test2 = read_file('Day 8/test2.txt')
-    print('Task2 on test:', main_function(input_test2, True))
+    print('Task2 on test2:', main_function(input_test2, True))
     print('Task2 on test:', main_function(input_test, True))
     print('Task2 on input:', main_function(input_real, True))
