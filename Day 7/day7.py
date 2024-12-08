@@ -63,6 +63,7 @@ def is_possible(key: int, values: tuple[int], symbols: tuple[str]) -> bool:
     """
     possible_results = [set() for _ in range(len(values))]
     possible_results[0].add(values[0])
+    new_res = 0
 
     for i, val in enumerate(values[1:], start=1):
         for prev_result in possible_results[i-1]:
@@ -81,7 +82,8 @@ def is_possible(key: int, values: tuple[int], symbols: tuple[str]) -> bool:
 
 
 @timeit
-def main_function(dct: list[tuple[int, tuple[int]]], symbols: tuple[str]) -> int:
+def main_function(dct: list[tuple[int, tuple[int]]],
+                  symbols: tuple[str]) -> int:
     """
     Sums the keys for which the target can be achieved using specified
     operations.
