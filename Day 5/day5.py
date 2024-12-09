@@ -125,4 +125,5 @@ if __name__ == '__main__':
     print('Task2 on test:', find_middle(fixed_test))
     print('Task2 on input:', find_middle(fixed_real))
     input_test1 = read_file('Day 5/test1.txt')
-    print('Task1 on input:',  fix_incorrect(main_function(*input_test1)[1], input_test1[0]))
+    print('Task1 on input:',  fix_incorrect(main_function(*input_test1)[1],
+                                            input_test1[0]))
