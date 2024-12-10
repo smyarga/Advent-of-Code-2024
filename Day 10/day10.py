@@ -18,15 +18,14 @@ def main(dct):
         paths = [[(s_x, s_y)]]
         cur = 0
         while cur < 9:
-            for i, path in enumerate(paths.copy()):
+            for path in paths.copy():
                 paths.remove(path)
                 cur_x, cur_y = path[-1]
                 for dx, dy in directions:
                     if dct.get((cur_x + dx, cur_y + dy), '') == cur+1:
                         paths.append(path+[(cur_x + dx, cur_y + dy)])
-            
             cur += 1
-        
+
         count1 += len({path[-1] for path in paths})
         count2 += len(paths)
 
