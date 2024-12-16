@@ -149,11 +149,11 @@ def main2(grid, directions):
                             for cx, cy in layer:
                                 grid[(cx, cy)] = grid[(cx - x, cy)]
                                 grid[(cx - x, cy)] = '.'
-                            if (new_x, new_y) == (6, 3):
-                                grid1 = [[None]*(width+1) for _ in range(height+1)]
-                                for key, val in grid.items():
-                                    grid1[key[0]][key[1]] = val
-                                print('\n'.join([''.join(row) for row in grid1]))
+                            # if (new_x, new_y) == (6, 3):
+                            #     grid1 = [[None]*(width+1) for _ in range(height+1)]
+                            #     for key, val in grid.items():
+                            #         grid1[key[0]][key[1]] = val
+                            #     print('\n'.join([''.join(row) for row in grid1]))
                         s_x, s_y = new_x, new_y
                         break
 
