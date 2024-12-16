@@ -1,6 +1,3 @@
-from copy import deepcopy
-
-
 def read_file(pathname: str) -> dict[tuple[int, int], str]:
     """
     Reads a file and converts its content into a dictionary.
