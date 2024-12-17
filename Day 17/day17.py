@@ -48,6 +48,10 @@ def calculate(a: int, b: int, c: int, program: str):
     return result
 
 def find_lowest(program):
+    '''
+    >>> find_lowest('0,3,5,4,3,0')
+    117440
+    '''
     program_splitted = program.split(',')
     # for i in range(50):
     #     print(calculate(i, 0, 0, program))
