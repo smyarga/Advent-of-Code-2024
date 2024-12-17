@@ -52,7 +52,6 @@ def find_lowest(program):
     # for i in range(50):
     #     print(calculate(i, 0, 0, program))
     ind = [(0, len(program_splitted)-1)]
-    index = len(program_splitted)-1
 
     while True:
         start, index = ind.pop(0)
