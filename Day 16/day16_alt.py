@@ -29,7 +29,7 @@ def read_file(pathname: str) -> dict[tuple[int, int], str]:
         board = {}
         for i, line in enumerate(file):
             for j, el in enumerate(line.strip()):
-                board[(i, j)] = el
+                board[(i, j)] = el #if el not in 'SE' else '.'
                 if el == 'S':
                     start = (i, j)
                 elif el == 'E':
@@ -68,6 +68,7 @@ def move(board, start, end):
     while paths:
         for (end_point, cur_dir), (path, points) in paths.copy().items():
             # print(len(path), end=' ', flush=True)
+            print((end_point, cur_dir), (path, points) )
             del paths[(end_point, cur_dir)]
             px, py = end_point
             if (px, py) == end:
@@ -80,21 +81,17 @@ def move(board, start, end):
                     if (newx, newy) in board and board[(newx, newy)] != '#' and (newx, newy) not in path:
                         path_new = path | {(newx, newy)}
                         new_points = points + (1001 if cur_dir != (dx, dy) else 1)
-                        pos_ways.append(((newx, newy), path_new, new_points))
-                # if len(pos_ways) == 1 and board[(newx, newy)] == 'E':
-                #     break
-                if len(pos_ways) == 1:
-                    path = path_new
-                    points = new_points
-                else:
+                        pos_ways.append((((newx, newy), (dx, dy)), path_new, new_points))
+                if len(pos_ways) != 1:
                     break
-            if not pos_ways:
-                continue
-            for ((newx, newy), path_new, new_points) in pos_ways:
-                if ((newx, newy), (dx, dy)) not in paths or paths[((newx, newy), (dx, dy))][1] > new_points:
-                    paths[((newx, newy), (dx, dy))] = (path_new, new_points)
-                elif paths[((newx, newy), (dx, dy))][1] == new_points:
-                    paths[((newx, newy), (dx, dy))] = (paths[((newx, newy), (dx, dy))][0]|path_new, new_points)
+                ((px, py), cur_dir), path, points = pos_ways[0]
+            if pos_ways:
+                for (((newx, newy), (dx, dy)), path_new, new_points) in pos_ways:
+                    if ((newx, newy), (dx, dy)) not in paths or paths[((newx, newy), (dx, dy))][1] > new_points:
+                        paths[((newx, newy), (dx, dy))] = (path_new, new_points)
+                    elif paths[((newx, newy), (dx, dy))][1] == new_points:
+                        paths[((newx, newy), (dx, dy))] = (paths[((newx, newy), (dx, dy))][0]|path_new, new_points)
+    print(routes)
     best_routes = [route for route in routes if min(routes, key=lambda x: x[-1])[-1] == route[-1]]
     comf_points = {point for route in best_routes for point in route[0]}
     return sorted(routes, key=lambda x: x[-1])[0][-1], len(comf_points)
