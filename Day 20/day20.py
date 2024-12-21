@@ -66,20 +66,13 @@ def main(board, start, end, m, limit):
         if symb == '#' and {(x-1, y), (x, y-1), (x+1, y), (x, y+1)}&best_path:
             collisions.add((x, y))
     print(len(collisions))
-    for k in range(2, m+1):
-        for i, (px, py) in enumerate(collisions):
-            print(i, end=' ', flush=True)
-            board1 = board.copy()
-            paths = [{(px, py)}]
-            for dx, dy in [(-1, 0), (0, -1), (1, 0), (0, 1)]:
-                newx, newy = px+dx, py+dy
-                if (newx, newy) in board and board[(newx, newy)] != '#' and (newx, newy) not in path:
-                    path_new = path | {(newx, newy)}
-
-            board1[(px, py)] = '.'
-            new_path = move(board1, start, end, min_-limit)
-            if new_path:
-                cheats.append(len(new_path)-1)
+    for i, (px, py) in enumerate(collisions):
+        print(i, end=' ', flush=True)
+        board1 = board.copy()
+        board1[(px, py)] = '.'
+        new_path = move(board1, start, end, min_-limit)
+        if new_path:
+            cheats.append(len(new_path)-1)
     return sorted({min_-n: cheats.count(n) for n in cheats if min_-n >= limit}.items())
 
 
@@ -92,8 +85,8 @@ if __name__ == '__main__':
     print('Task on test1:', len(move(*input_test1))-1)
     print('Task on input:', len(move(*input_real))-1)
     print('Task on test1:', main(*input_test1, 2, 1))
-    # print('Task on test1:', main(*input_real, 2, 100))
-    print('Task on test1:', main(*input_test1, 20, 1))
+    print('Task on test1:', main(*input_real, 2, 100))
+    # print('Task on test1:', main(*input_test1, 20, 1))
 
 # @timeit
 # def move(bytes, size, steps):
